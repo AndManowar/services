@@ -29,6 +29,10 @@ abstract class BaseApplication extends yii\base\Application
 /**
  * Class WebApplication
  * Include only Web application related components here
+ *
+ * @property \common\components\handbook\Main $handbook
+ * @property \common\components\rbac\Main $accessControl
+ * @property \common\components\settings\Main $settings
  */
 class WebApplication extends yii\web\Application
 {

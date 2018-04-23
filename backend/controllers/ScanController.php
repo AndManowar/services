@@ -10,8 +10,11 @@ namespace backend\controllers;
 
 use common\components\rbac\baseController;
 use Yii;
-use yii\web\Controller;
 
+/**
+ * Class ScanController
+ * @package backend\controllers
+ */
 class ScanController extends baseController
 {
 
@@ -23,19 +26,19 @@ class ScanController extends baseController
     public function actionIndex()
     {
         $scanList = [];
-        $branch = Yii::$app->accessControll->branchs;
-        $group = Yii::$app->accessControll->getAllGroupPermission();
+        $branch = Yii::$app->accessControl->branchs;
+        $group = Yii::$app->accessControl->getAllGroupPermission();
 
         if (Yii::$app->request->post('branch') != null) {
             $branchItem = $branch[Yii::$app->request->post('branch')];
-            $scanList = Yii::$app->accessControll->scanNewMethod(Yii::getAlias($branchItem[1]), Yii::$app->request->post('branch'), $branchItem[2]);
+            $scanList = Yii::$app->accessControl->scanNewMethod(Yii::getAlias($branchItem[1]), Yii::$app->request->post('branch'));
         }
 
 
         return $this->render('index', [
             'scanList' => $scanList,
-            'branch' => $branch,
-            'group' => $group,
+            'branch'   => $branch,
+            'group'    => $group,
             'branchId' => Yii::$app->request->post('branch'),
         ]);
     }
@@ -50,18 +53,17 @@ class ScanController extends baseController
      */
     public function actionAddRout()
     {
-        if(Yii::$app->request->isPost){
+        if (Yii::$app->request->isPost) {
 
-            $routName = Yii::$app->accessControll->addRoutePermission(trim(Yii::$app->request->post('rout')), trim(Yii::$app->request->post('branch')));
+            $routName = Yii::$app->accessControl->addRoutePermission(trim(Yii::$app->request->post('rout')), trim(Yii::$app->request->post('branch')));
 
-            if($routName != null){
-                Yii::$app->accessControll->addRouteToGroup($routName, trim(Yii::$app->request->post('group')));
+            if ($routName != null) {
+                Yii::$app->accessControl->addRouteToGroup($routName, trim(Yii::$app->request->post('group')));
 
                 return true;
             }
-        }else{
-            return false;
         }
+
         return false;
     }
 

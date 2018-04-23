@@ -1,22 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: manowartop
- * Date: 20.04.18
- * Time: 12:07
- */
 
+use common\components\handbook\models\Handbook;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /**
- * @var \common\components\referenceBook\models\ReferenceBookSearch $searchModel
+ * @var Handbook $searchModel
  * @var \yii\data\ActiveDataProvider $dataProvider
  */
 
-$this->title = 'Справочники';
+$this->title = 'Справочник';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
+
 
 <section id="description" class="card">
     <div class="card-header">
@@ -24,15 +22,15 @@ $this->title = 'Справочники';
         <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
         <div class="heading-elements">
             <ul class="list-inline mb-0">
-                <li><a data-action="reload"><i class="icon-android-refresh"></i></a></li>
-                <li><a href="<?= Url::toRoute(['reference-book/create']) ?>"><i class="icon-android-add-circle"></i></a></li>
+                <li><a href="<?= Url::toRoute(['/handbook']) ?>"><i class="icon-android-refresh"></i></a></li>
+                <li><a href="<?= Url::toRoute(['handbook/create']) ?>"><i class="icon-android-add-circle"></i></a></li>
             </ul>
         </div>
     </div>
     <div class="card-body collapse in">
         <div class="card-block">
             <div class="card-text">
-
+                <?php Pjax::begin() ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel'  => $searchModel,
@@ -93,6 +91,7 @@ $this->title = 'Справочники';
                         ],
                     ],
                 ]); ?>
+                <?php Pjax::end() ?>
             </div>
         </div>
     </div>

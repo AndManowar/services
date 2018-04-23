@@ -15,9 +15,12 @@ use common\components\rbac\models\RoleEditForm;
 use Yii;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Class RolesController
+ * @package backend\controllers
+ */
 class RolesController extends baseController
 {
-
     /**
      * Список ролей
      *
@@ -29,19 +32,21 @@ class RolesController extends baseController
     {
         $roles = Yii::$app->authManager->getRoles();
 
-        $groupPermissions = Yii::$app->accessControll->getAllGroupPermission();
+        $groupPermissions = Yii::$app->accessControl->getAllGroupPermission();
         if ($name != null) {
             if ($type == 1) {
                 $role = Yii::$app->authManager->getRole($name);
                 Yii::$app->authManager->remove($role);
+                Yii::$app->session->setFlash('danger', 'Роль удалена');
                 return $this->redirect(['index', 'roles' => $roles, 'permissions' => $groupPermissions]);
             } else {
-                Yii::$app->accessControll->deleteGroupPermission($name);
+                Yii::$app->accessControl->deleteGroupPermission($name);
+                Yii::$app->session->setFlash('danger', 'Группа разрешений удалена');
                 return $this->redirect(['index', 'roles' => $roles, 'permissions' => $groupPermissions]);
             }
         }
         return $this->render('index', [
-            'roles' => $roles,
+            'roles'       => $roles,
             'permissions' => $groupPermissions,
         ]);
     }
@@ -64,9 +69,9 @@ class RolesController extends baseController
             if (Model::loadMultiple($rbacs, Yii::$app->request->post()) && Model::validateMultiple($rbacs)) {
                 $transaction = Yii::$app->db->beginTransaction();
 
-                if (Yii::$app->accessControll->addRoles($rbacs)) {
+                if (Yii::$app->accessControl->addRoles($rbacs)) {
                     $transaction->commit();
-                    Yii::$app->session->setFlash('success', 'Разрешение успешно создано');
+                    Yii::$app->session->setFlash('success', 'Роль успешно создана');
                     return $this->redirect('index');
                 } else {
                     $transaction->rollBack();
@@ -75,7 +80,7 @@ class RolesController extends baseController
 
             }
             return $this->render('create', [
-                'rbacs' => (empty($rbacs)) ? [new RoleEditForm()] : $rbacs,
+                'rbacs'    => (empty($rbacs)) ? [new RoleEditForm()] : $rbacs,
                 'isCreate' => true
             ]);
         } else {
@@ -84,14 +89,14 @@ class RolesController extends baseController
             $rbacs = new RoleEditForm(['scenario' => 'update']);
             $rbacs->loadAttributes($role);
             if ($rbacs->load(Yii::$app->request->post())) {
-                if (Yii::$app->accessControll->editRole($rbacs->name,$rbacs->description)) {
+                if (Yii::$app->accessControl->editRole($rbacs->name, $rbacs->description)) {
                     Yii::$app->session->setFlash('success', 'Роль успешно изменена');
                     $this->redirect('index');
                 }
 
             }
             return $this->render('create', [
-                'rbacs' => $rbacs,
+                'rbacs'    => $rbacs,
                 'isCreate' => false
             ]);
         }
@@ -115,7 +120,7 @@ class RolesController extends baseController
             if (Model::loadMultiple($permissions, Yii::$app->request->post()) && Model::validateMultiple($permissions)) {
                 $transaction = Yii::$app->db->beginTransaction();
 
-                if (Yii::$app->accessControll->addGroupPermissions($permissions)) {
+                if (Yii::$app->accessControl->addGroupPermissions($permissions)) {
                     $transaction->commit();
                     Yii::$app->session->setFlash('success', 'Группа разрешений успешно создана');
                     return $this->redirect('index');
@@ -126,17 +131,17 @@ class RolesController extends baseController
             }
             return $this->render('group_create', [
                 'permissions' => (empty($permissions)) ? [new GroupPermissionForm()] : $permissions,
-                'isCreate' => true
+                'isCreate'    => true
             ]);
         } else {
 
-            $permission = Yii::$app->accessControll->getGroupPermission($name);
+            $permission = Yii::$app->accessControl->getGroupPermission($name);
 
             $form = new GroupPermissionForm();
             $form->systemName = $permission->description;
             if ($form->load(Yii::$app->request->post())) {
 
-                if (Yii::$app->accessControll->addGroupPermission($form->systemName)) {
+                if (Yii::$app->accessControl->addGroupPermission($form->systemName)) {
                     Yii::$app->session->setFlash('success', 'Группа разрешений успешно создана');
                     $this->redirect('index');
                 }
@@ -144,7 +149,7 @@ class RolesController extends baseController
             }
             return $this->render('group_create', [
                 'permissions' => $form,
-                'isCreate' => false
+                'isCreate'    => false
             ]);
         }
     }
@@ -164,12 +169,12 @@ class RolesController extends baseController
             if (isset($data['role']) and isset($data['group']) and isset($data['status'])) {
 
                 if ($data['status'] == 1) {
-                    Yii::$app->accessControll->addGroupToRole($data['role'], $data['group']);
+                    Yii::$app->accessControl->addGroupToRole($data['role'], $data['group']);
                     return true;
                 }
 
                 if ($data['status'] == 0) {
-                    Yii::$app->accessControll->deleteGroupToRole($data['role'], $data['group']);
+                    Yii::$app->accessControl->deleteGroupToRole($data['role'], $data['group']);
                     return true;
                 }
             }
@@ -203,9 +208,7 @@ class RolesController extends baseController
      */
     public function actionRemoveRoute($name, $group)
     {
-        Yii::$app->accessControll->deleteRouteToGroup($name, $group);
+        Yii::$app->accessControl->deleteRouteToGroup($name, $group);
         return $this->actionRouteList($group);
     }
-
-
 }

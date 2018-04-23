@@ -16,11 +16,12 @@ use yii\helpers\Url;
                 <li class="nav-item mobile-menu hidden-md-up float-xs-left"><a
                             class="nav-link nav-menu-main menu-toggle hidden-xs"><i class="icon-menu5 font-large-1"></i></a>
                 </li>
-                <li class="nav-item"><a href="<?= Url::toRoute(['site/index']) ?>" class="navbar-brand nav-link"><img alt="branding logo"
-                                                                                             src="<?= $directoryAsset ?>/images/logo/robust-logo-light.png"
-                                                                                             data-expand="<?= $directoryAsset ?>/images/logo/robust-logo-light.png"
-                                                                                             data-collapse="<?= $directoryAsset ?>/images/logo/robust-logo-small.png"
-                                                                                             class="brand-logo"></a>
+                <li class="nav-item"><a href="<?= Url::toRoute(['site/index']) ?>" class="navbar-brand nav-link"><img
+                                alt="branding logo"
+                                src="<?= $directoryAsset ?>/images/logo/robust-logo-light.png"
+                                data-expand="<?= $directoryAsset ?>/images/logo/robust-logo-light.png"
+                                data-collapse="<?= $directoryAsset ?>/images/logo/robust-logo-small.png"
+                                class="brand-logo"></a>
                 </li>
                 <li class="nav-item hidden-md-up float-xs-right"><a data-toggle="collapse" data-target="#navbar-mobile"
                                                                     class="nav-link open-navbar-container"><i

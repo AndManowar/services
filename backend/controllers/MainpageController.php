@@ -24,7 +24,7 @@ class MainpageController extends baseController
      */
     public function actionIndex()
     {
-        //return $this->render('index', ['statistic' => StatisticHelper::getMainStatistic()]);
+
     }
 
 }

@@ -1,29 +1,16 @@
 $(document).ready(function () {
 
-    $(document).on('click', '.add_new_field', function (e) {
+    $(document).on('click', '.add_field', function (e) {
         e.preventDefault();
 
-        $.ajax({
-            url: '/dashboard/ajax/add-field',
-            type: 'POST',
-            success: function (data) {
-                $(data).appendTo('.additional');
-            }
-        });
+        var button = $(this);
+
+        if (parseInt(button.attr('data-state')) === 1) {
+            $('.additional_fields').removeClass('hidden');
+            button.attr('data-state', 2);
+        } else {
+            $('.additional_fields').addClass('hidden');
+            button.attr('data-state', 1);
+        }
     });
-
-    $(document).on('click', '.remove_field', function (e) {
-        e.preventDefault();
-        $(this).closest('.card').remove();
-
-    });
-
-    $(document).on('click', '#npw-map-sidebar-ul', function () {
-        $('#orderform-warehouse_name').val($('.npw-details-title').text());
-    });
-
-    $(document).on('change', '#npw-cities', function () {
-        $('#orderform-city_name').val($(this).val());
-    });
-
 });

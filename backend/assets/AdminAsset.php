@@ -41,8 +41,10 @@ class AdminAsset extends AssetBundle
         'js/core/app.js',
         'js/scripts/pages/dashboard-lite.js',
         'js/main.js',
+        'js/scan-js.js',
     ];
     public $depends = [
-
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }

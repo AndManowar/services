@@ -9,7 +9,8 @@ use common\models\forms\LoginForm;
 use yii\filters\VerbFilter;
 
 /**
- * Site controller
+ * Class SiteController
+ * @package backend\controllers
  */
 class SiteController extends Controller
 {

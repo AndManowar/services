@@ -49,7 +49,7 @@ $(function() {
 
         $.ajax({
             type: 'post',
-            url: 'roles/update',
+            url: '/dashboard/roles/update',
             data: {
                 role: role,
                 group: group,

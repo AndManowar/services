@@ -361,6 +361,5 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@webroot/style');
                 </div>
             </div>
         </div>
-
     </div>
 </div>

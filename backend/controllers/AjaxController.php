@@ -34,12 +34,4 @@ class AjaxController extends Controller
 
         return parent::beforeAction($action);
     }
-
-    /**
-     * @return string
-     */
-    public function actionAddField()
-    {
-        return $this->renderAjax('/reference-book/field_form', ['model' => new AdditionalField()]);
-    }
 }

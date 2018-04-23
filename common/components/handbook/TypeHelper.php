@@ -6,7 +6,7 @@
  * Time: 9:43
  */
 
-namespace common\components\referenceBook\helpers;
+namespace common\components\handbook;
 
 use yii\base\InvalidArgumentException;
 use yii\base\UnknownPropertyException;
@@ -16,52 +16,55 @@ use yii\helpers\Html;
 use yii\validators\StringValidator;
 use yii\validators\BooleanValidator;
 use yii\validators\NumberValidator;
-use yii\web\NotFoundHttpException;
 
 class TypeHelper
 {
 
+    /**
+     * @var
+     */
     public static $errors;
 
-
+    /**
+     * @var array
+     */
     private static $types = [
         1 => [
             'StringValidator',                      // Класс Валидатора
             ['max' => 30],                          // Параметры класа Валидатора
             'Текстовое поле (макс. 30 знаков)',     // Описание
             'textInput',                            // Элемент формы (Класс Виджета)
-            ['string', 'max' => 30]
+            ['string', 'max' => 30],
         ],
         2 => [
             'StringValidator',
             ['max' => 250],
             'Большое текст. поле (макс. 250 знаков)',
             'textInput',
-            ['string', 'max' => 250]
+            ['string', 'max' => 250],
         ],
         3 => [
             'BooleanValidator',
             [],
             'Чекбокс (Да / Нет)',
             'checkbox',
-            ['boolean']
+            ['boolean'],
         ],
         4 => [
             'NumberValidator',
             ['integerOnly' => true],
             'Целое число',
             'textInput',
-            ['integer']
+            ['integer'],
         ],
         5 => [
             'NumberValidator',
             [],
             'Число',
             'textInput',
-            ['integer']
+            ['integer'],
         ],
     ];
-
 
     /**
      * @param null $id
@@ -69,10 +72,11 @@ class TypeHelper
      *
      * Список Наименований / Наименование типов
      */
-    public static function getFieldTypes($id = null)
+    public static function getTitleTypes($id = null)
     {
-        if (isset(self::$types[$id])) return self::$types[$id][2];
-        else {
+        if (isset(self::$types[$id])) {
+            return self::$types[$id][2];
+        } else {
             return ArrayHelper::getColumn(self::$types, function ($array) {
                 return $array[2];
             });
@@ -87,8 +91,11 @@ class TypeHelper
      */
     public static function getTypes($id = null)
     {
-        if (isset(self::$types[$id])) return self::$types[$id];
-        else return self::$types;
+        if (isset(self::$types[$id])) {
+            return self::$types[$id];
+        } else {
+            return self::$types;
+        }
     }
 
     /**
@@ -105,6 +112,7 @@ class TypeHelper
     {
         if (isset(self::$types[$id])) {
             $inputName = self::$types[$id][3];
+
             return Html::$inputName($name, $value, $options);
         } else {
             throw new UnknownPropertyException;
@@ -126,7 +134,6 @@ class TypeHelper
         }
     }
 
-
     /**
      * @param $id
      * @param $value
@@ -138,27 +145,31 @@ class TypeHelper
      */
     public static function validation($id, $value)
     {
-        if (!isset(self::$types[$id])) throw new UnknownPropertyException;
+        if (!isset(self::$types[$id])) {
+            throw new UnknownPropertyException;
+        }
 
         self::$errors = null;
+        /** @var NumberValidator|BooleanValidator|StringValidator $validator */
         $validator = self::createValidator(self::$types[$id][0], self::$types[$id][1]);
 
         if ($validator->validate($value, self::$errors)) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
+
     }
 
 
     /**
-     * @param $sysName
+     * @param integer $fieldType
      * @param $params
      * @return BooleanValidator|NumberValidator|StringValidator
      */
-    private static function createValidator($sysName, $params)
+    private static function createValidator($fieldType, $params)
     {
-        switch ($sysName) {
+        switch ($fieldType) {
             case 'NumberValidator':
                 return new NumberValidator($params);
                 break;
@@ -168,9 +179,8 @@ class TypeHelper
             case 'StringValidator':
                 return new StringValidator($params);
                 break;
-            default:
-                throw new InvalidArgumentException();
-                break;
         }
+
+        throw new InvalidArgumentException();
     }
 }

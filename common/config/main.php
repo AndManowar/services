@@ -4,32 +4,29 @@ return [
     'aliases'    => [
         '@bower'      => '@vendor/bower-asset',
         '@npm'        => '@vendor/npm-asset',
-        '@uploadPath' => '@frontend/web/uploads',
-        '@bannerPath' => '@frontend/web/style/img',
     ],
     'components' => [
-        'language'       => 'ru-RU', //
-        'cache'          => [
+        'language' => 'ru-RU', //
+        'cache'    => [
             'class' => 'yii\caching\FileCache',
         ],
-        'handbook'       => [
+        'handbook' => [
             'class' => 'common\components\handbook\Main',
         ],
 
-        'config'         => [
-            'class' => 'common\components\settings\Configs',
+        'settings'    => [
+            'class' => 'common\components\settings\Main',
         ],
-        'authManager'    => [
+        'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
 
-        'accessControll' => [
+        'accessControl' => [
             'class'   => 'common\components\rbac\Main',
             'branchs' => [
                 ['b', '@backend/controllers', 'Админ панель', '\backend\controllers'],
                 ['f', '@frontend/controllers', 'Публичная часть', '\frontend\controllers'],
             ],
         ],
-
     ],
 ];

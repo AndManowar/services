@@ -2,41 +2,32 @@
 /**
  * Created by PhpStorm.
  * User: manowartop
- * Date: 20.04.18
- * Time: 12:06
+ * Date: 31.01.18
+ * Time: 11:12
  */
 
-namespace common\components\referenceBook\models;
+namespace common\components\settings\models;
 
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * Class ReferenceBookSearch
- * @package common\components\referenceBook
+ * Class SettingsSearch
+ *
+ * @package common\models
  */
-class ReferenceBookSearch extends ReferenceBook
+class SettingsSearch extends Settings
 {
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['systemName', 'description', 'value'], 'safe']
         ];
     }
 
     /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        return Model::scenarios();
-    }
-
-    /**
-     * @param array $params
+     * @param $params
+     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -44,7 +35,7 @@ class ReferenceBookSearch extends ReferenceBook
         $query = self::find();
 
         $dataProvider = new ActiveDataProvider([
-            'query'      => $query,
+            'query' => $query,
             'pagination' => [
                 'pageSize' => 15,
             ]
@@ -52,11 +43,16 @@ class ReferenceBookSearch extends ReferenceBook
 
         $this->load($params);
 
+        $query->andFilterWhere(['like', 'systemName', $this->systemName]);
+        $query->andFilterWhere(['like', 'description', $this->description]);
+
         if (!$this->validate()) {
 
             return $dataProvider;
         }
 
+
         return $dataProvider;
     }
+
 }

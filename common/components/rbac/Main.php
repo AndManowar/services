@@ -376,10 +376,11 @@ class Main extends Component
 
 
     /**
+     * Сканирование контролеров
+     *
      * @param $controllerPath
      * @param $branchId
      * @return array
-     * Сканирование контролеров
      */
     public function scanNewMethod($controllerPath, $branchId)
     {
@@ -414,7 +415,7 @@ class Main extends Component
                             }
                         }
                         // проверка подключаемых методов  actions()
-                        $actions = $this->parseDunamicActions($file);
+                        $actions = $this->parseDynamicActions($file);
                         foreach ($actions as $item) {
                             $route = $space . '/' . yii\helpers\BaseInflector::camel2id($item);
                             // проверка на существования правил
@@ -452,7 +453,7 @@ class Main extends Component
     }
 
 
-    private function parseDunamicActions($text)
+    private function parseDynamicActions($text)
     {
         $action = [];
         if (preg_match('|public\s+function\s+actions\(\s*\)\s*{(.*)return(.+);|Ums', $text, $match)) {
